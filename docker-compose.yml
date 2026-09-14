@@ -1,0 +1,16 @@
+services:
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    ports: ["27017:27017"]
+    volumes: ["steady-mongo:/data/db"]
+  api:
+    build: ./backend/Steady.Api
+    restart: unless-stopped
+    ports: ["5000:8080"]
+    environment:
+      MongoDb__ConnectionString: mongodb://mongo:27017
+      MongoDb__Database: steady
+    depends_on: [mongo]
+volumes:
+  steady-mongo:
